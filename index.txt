@@ -1,0 +1,93 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Test
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            /*TreeNode node = new TreeNode("C:");
+            node.Tag = "C:/mysql";
+
+            node.Nodes.Add("...");
+
+            tv.Nodes.Add(node); */
+            DriveTreeInit();
+        }
+
+        void DriveTreeInit()
+        {
+            tv.BeginUpdate();
+            tv.Nodes.Clear();
+
+            TreeNode n = new TreeNode("C:/mysql", 0, 0);
+            tv.Nodes.Add(n);
+
+            GetDirs(n);
+
+            tv.EndUpdate();
+        }
+
+        public void GetDirs(TreeNode node)
+        {
+            DirectoryInfo[] diArray;
+            FileInfo[] fiArray;
+            node.Nodes.Clear();
+            string fullPath = node.FullPath;
+            DirectoryInfo di = new DirectoryInfo(fullPath);
+            try
+            {
+                diArray = di.GetDirectories();
+                fiArray = di.GetFiles();
+            }
+            catch
+            {
+                return;
+            }
+
+            foreach (DirectoryInfo dirinfo in diArray)
+            {
+                TreeNode dir = new TreeNode(dirinfo.Name, 1, 2);
+                node.Nodes.Add(dir);
+
+            }
+            foreach (FileInfo fileinfo in fiArray)
+            {
+                TreeNode file = new TreeNode(fileinfo.Name, 1, 1);
+                node.Nodes.Add(file);
+            }
+
+        }
+
+
+        private void tv_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            tv.BeginUpdate();
+
+            foreach (TreeNode node in e.Node.Nodes)
+            {
+                GetDirs(node);
+            }
+
+            tv.EndUpdate();
+        }
+
+
+
+
+    }
+}
