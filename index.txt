@@ -16,30 +16,20 @@ namespace Test
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            /*TreeNode node = new TreeNode("C:");
-            node.Tag = "C:/mysql";
-
-            node.Nodes.Add("...");
-
-            tv.Nodes.Add(node); */
             DriveTreeInit();
         }
 
         void DriveTreeInit()
         {
-            tv.BeginUpdate();
-            tv.Nodes.Clear();
+            tvFiles.BeginUpdate();
+            tvFiles.Nodes.Clear();
 
             TreeNode n = new TreeNode("C:/mysql", 0, 0);
-            tv.Nodes.Add(n);
+            tvFiles.Nodes.Add(n);
 
             GetDirs(n);
 
-            tv.EndUpdate();
+            tvFiles.EndUpdate();
         }
 
         public void GetDirs(TreeNode node)
@@ -73,21 +63,16 @@ namespace Test
 
         }
 
-
-        private void tv_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        private void tv_BeforeExpand_1(object sender, TreeViewCancelEventArgs e)
         {
-            tv.BeginUpdate();
+            tvFiles.BeginUpdate();
 
             foreach (TreeNode node in e.Node.Nodes)
             {
                 GetDirs(node);
             }
 
-            tv.EndUpdate();
+            tvFiles.EndUpdate();
         }
-
-
-
-
     }
 }
